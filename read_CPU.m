@@ -22,6 +22,7 @@ function data = read_CPU(pj,filename)
 %    12: x
 %    13: run time
 %    14: x
+%   str: L2/linf
 
 dir = 'data/';
 in_pwd = [dir pj '/' filename];
