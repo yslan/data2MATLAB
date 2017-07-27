@@ -5,13 +5,13 @@ format shorte
 
 out_file = 'PNP_r_pconv'
 
-pj = 'conv_PNP_r';
-prefix = 'CPU_deg';
+pj = 'result_r_sc1_refine';
+prefix = 'deg';
 
-ind_case = [2 4 6 8 10];
+ind_case = [2 4 6 8 10 12 14 16];
 
 
-n_iter = 1000; % reach steady state
+n_iter = 2000; % reach steady state
 n_case = length(ind_case);
 
 Dir = ['data/' pj '/'];
@@ -74,9 +74,11 @@ colorSet = [            % Setting color of plot, ref: MATLAB
  0.99 0.41 0.23 % Data 20
 ];
 
+ind = [1 2 4 8];
+rang = [1,1.7e4,1e-12,1e2];
+n_ind = length(ind);
 % figure
 figure(11) % show conv. to steady state
-ind = [1 2 4];
 str1={};
 str2={};
 str3={};
@@ -97,12 +99,12 @@ for i=1:length(ind) % deg 2 6 10
    str3=[str3, ['deg ' num2str(ind_case(ii)) ' \Phi']];
 end
    ppp = [p1;p2;p3];
-   ppp = reshape(ppp,9,1);
+   ppp = reshape(ppp,3*n_ind,1);
 
    str = [str1;str2;str3];
-   str = reshape(str,9,1); 
+   str = reshape(str,3*n_ind,1); 
    legend(ppp,str,'location','southwest');
-   axis([1,1.7e4,1e-9,1e2]);
+   axis(rang);
    xlabel('time step');
    ylabel('L2 error');
 
@@ -116,7 +118,6 @@ end
 
 figure(12) % linf of fig.11
 
-ind = [1 2 4];
 str1={};
 str2={};
 str3={};
@@ -137,12 +138,12 @@ for i=1:length(ind) % deg 2 6 10
    str3=[str3, ['deg ' num2str(ind_case(ii)) ' \Phi']];
 end
    ppp = [p1;p2;p3];
-   ppp = reshape(ppp,9,1);
+   ppp = reshape(ppp,3*n_ind,1);
 
    str = [str1;str2;str3];
-   str = reshape(str,9,1);
+   str = reshape(str,3*n_ind,1);
    legend(ppp,str,'location','southwest');
-   axis([1,1.7e4,1e-9,1e2]);
+   axis(rang);
    xlabel('time step');
    ylabel('linf error');
 
@@ -154,19 +155,24 @@ end
    close(12)
 
 
+% fig.2*
+   rang = [1,16,1e-12,1];
 figure(21) % p-conv (err_cN)
 
-   p1 = loglog(ind_case',err_cN(:,1),...
+   p1 = semilogy(ind_case',err_cN(:,1),...
+            'Marker','o','MarkerFaceColor',colorSet(1,:),...
             'LineWidth',1.5,'color',colorSet(1,:),'LineStyle','-');
    hold on
-   p2 = loglog(ind_case',err_cP(:,1),...
+   p2 = semilogy(ind_case',err_cP(:,1),...
+            'Marker','o','MarkerFaceColor',colorSet(2,:),...
             'LineWidth',1.5,'color',colorSet(2,:),'LineStyle','-');
-   p3 = loglog(ind_case',err_pot(:,1),...
+   p3 = semilogy(ind_case',err_pot(:,1),...
+            'Marker','o','MarkerFaceColor',colorSet(3,:),...
             'LineWidth',1.5,'color',colorSet(3,:),'LineStyle','-');
    legend([p1;p2;p3], 'cN','cP','\Phi','location','southwest');
-   axis([1,12,1e-10,1]);
+   axis(rang);
    xlabel('degree of polynomials')
-   ylabel('L2 error after 10000 time steps')
+   ylabel('L2 error after 20000 time steps')
 
    % save
    fff = gcf;
@@ -179,17 +185,20 @@ figure(21) % p-conv (err_cN)
 
 figure(22) % linf of fig.21
 
-   p1 = loglog(ind_case',err_cN(:,2),...
+   p1 = semilogy(ind_case',err_cN(:,2),...
+            'Marker','o','MarkerFaceColor',colorSet(1,:),...
             'LineWidth',1.5,'color',colorSet(1,:),'LineStyle','-');
    hold on
-   p2 = loglog(ind_case',err_cP(:,2),...
+   p2 = semilogy(ind_case',err_cP(:,2),...
+            'Marker','o','MarkerFaceColor',colorSet(2,:),...
             'LineWidth',1.5,'color',colorSet(2,:),'LineStyle','-');
-   p3 = loglog(ind_case',err_pot(:,2),...
+   p3 = semilogy(ind_case',err_pot(:,2),...
+            'Marker','o','MarkerFaceColor',colorSet(3,:),...
             'LineWidth',1.5,'color',colorSet(3,:),'LineStyle','-');
    legend([p1;p2;p3], 'cN','cP','\Phi','location','southwest');
-   axis([1,12,1e-10,1]);
+   axis(rang);
    xlabel('degree of polynomials')
-   ylabel('linf error after 10000 time steps')
+   ylabel('linf error after 20000 time steps')
 
    % save
    fff = gcf;
